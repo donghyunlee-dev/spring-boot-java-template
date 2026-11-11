@@ -1,0 +1,78 @@
+spring:
+  application:
+    name: spring-boot-java-template
+  profiles:
+    default: local
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  web:
+    error:
+      include-message: never
+      include-binding-errors: never
+      include-stacktrace: never
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    hikari:
+      pool-name: starter-hikari
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:20}
+      minimum-idle: ${DB_POOL_MIN_IDLE:5}
+      # Hikari duration values are configured in milliseconds.
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:2000}
+      validation-timeout: ${DB_VALIDATION_TIMEOUT:1000}
+      idle-timeout: ${DB_IDLE_TIMEOUT:600000}
+      max-lifetime: ${DB_MAX_LIFETIME:1800000}
+      keepalive-time: ${DB_KEEPALIVE_TIME:300000}
+      leak-detection-threshold: ${DB_LEAK_DETECTION_THRESHOLD:0}
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+    clean-disabled: true
+    baseline-on-migrate: false
+  jackson:
+    time-zone: Asia/Seoul
+    datatype:
+      datetime:
+        write-dates-as-timestamps: false
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      cors:
+        allowed-origin-patterns: "*"
+        allowed-methods: GET,OPTIONS
+        allowed-headers: "*"
+      base-path: /api/actuator
+  endpoint:
+    health:
+      show-details: never
+      probes:
+        enabled: true
+  info:
+    env:
+      enabled: false
+
+logging:
+  file:
+    path: ${LOG_DIR:logs}
+  level:
+    root: INFO
+
+app:
+  rest-client:
+    max-connections: ${REST_CLIENT_MAX_CONNECTIONS:100}
+    max-connections-per-route: ${REST_CLIENT_MAX_CONNECTIONS_PER_ROUTE:50}
+    connection-request-timeout: ${REST_CLIENT_CONNECTION_REQUEST_TIMEOUT:5s}
+    connect-timeout: ${REST_CLIENT_CONNECT_TIMEOUT:3s}
+    read-timeout: ${REST_CLIENT_READ_TIMEOUT:10s}
+    connection-ttl: ${REST_CLIENT_CONNECTION_TTL:5m}
+    idle-timeout: ${REST_CLIENT_IDLE_TIMEOUT:20s}
+    validate-after-inactivity: ${REST_CLIENT_VALIDATE_AFTER_INACTIVITY:5s}
